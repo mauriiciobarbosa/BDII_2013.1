@@ -1,0 +1,8 @@
+# @author : Mauricio Barbosa
+# @email  : mauriiciobarbosa@gmail.com
+# @date   : 2013-06-04
+
+# Generic Files
+*.tmp
+*~
+
