@@ -16,22 +16,14 @@ BEGIN
 		SELECT @num_item = (MAX(CONVERT(BIGINT, num_item)) + 1) 
 		FROM dbo.produto
 		
-		SELECT @cod_grupo = cod_grupo 
-		FROM dbo.grupo 
-		WHERE desc_grupo = @desc_grupo
+		SELECT @cod_grupo = cod_grupo, @num_familia = num_familia 
+		FROM dbo.familia
+		WHERE desc_grupo = @desc_grupo AND desc_familia = @desc_familia
 		
 		IF @cod_grupo IS NULL
 		BEGIN
-			RAISERROR('Não foi possível encontrar um grupo com a descrição informada.', 11, 1)
-		END
-		
-		SELECT @num_familia = num_familia 
-		FROM dbo.familia 
-		WHERE desc_familia = @desc_familia
-		
-		IF @num_familia IS NULL
-		BEGIN
-			RAISERROR('Não foi possível encontrar uma familia com a descrição informada.', 11, 1)
+			RAISERROR('Não foi possível encontrar a familia e o grupo ao qual o produto está associado,
+					    com a descrição informada.', 11, 1)
 		END
 		
 		INSERT INTO dbo.produto

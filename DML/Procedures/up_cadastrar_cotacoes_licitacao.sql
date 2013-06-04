@@ -2,7 +2,7 @@ CREATE PROCEDURE up_cadastrar_cotacoes_licitacao
 		(
 			@nom_fornecedor VARCHAR(70),
 			@num_licitacao CHAR(13),
-			@nom_basico VARCHAR(50),
+			@nom_basico_item VARCHAR(50),
 			@valor_cotacao DECIMAL(12,2)
 		)
 AS
@@ -12,13 +12,13 @@ BEGIN
 
 	BEGIN TRY
 		-- Verifica se o produto existe.
-		SELECT @num_item = P.num_item
-		FROM dbo.produto P
-		WHERE P.nom_basico = @nom_basico
+		SELECT @num_item = num_item
+		FROM dbo.produto 
+		WHERE nom_basico = @nom_basico_item
 		
 		IF @num_item IS NULL
 		BEGIN
-			RAISERROR('Não foi possível encontrar um produto com o nome básico informado.', 14, 1)
+			RAISERROR('Não foi possível encontrar o produto com o nome básico informado.', 14, 1)
 		END
 		-- Verifica se o fornecedor existe.
 		SELECT @num_fornecedor = num_fornecedor
@@ -27,7 +27,7 @@ BEGIN
 
 		IF @num_fornecedor IS NULL
 		BEGIN
-			RAISERROR('Não foi possível encontrar um fornecedor com o nome informado.', 14, 1)
+			RAISERROR('Não foi possível encontrar o fornecedor com o nome informado.', 14, 1)
 		END
 		
 		INSERT INTO dbo.cotacoes_licitacao
