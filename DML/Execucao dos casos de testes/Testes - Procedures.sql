@@ -27,14 +27,17 @@ USE bd_licitacao
 	up_cadastrar_item 'Testando procedure', 'Detalhe de teste procedure', 
 					  'Grupo BABA criado para teste do banco', 'Familia 12'
 	
-	-- Teste com erro em '@desc_grupo'.
+	-- Teste com erro em '@desc_familia'.
 	up_cadastrar_item 'Testando procedure', 'Detalhe de teste procedure', 
 					  'Grupo TJ criado para teste do banco', 'Familiass 12'
 					  
-	-- Teste sem erro.
+	-- Teste com erro: familia e grupo existem, mas não estão associados.
+	up_cadastrar_item 'Testando procedure', 'Detalhe de teste procedure', 
+					  'Grupo TJ criado para teste do banco', 'Familia 13'
+					  
 	up_cadastrar_item 'Testando procedure', 'Detalhe de teste procedure', 
 					  'Grupo TJ criado para teste do banco', 'Familia 12'
-					  
+					  				  
 	-- Teste sem erro - Comprovação
 	SELECT P.num_item,
 		   P.nom_basico,
@@ -81,7 +84,7 @@ USE bd_licitacao
 	-- Teste com erro em '@nom_fornecedor'.
 	up_cadastrar_cotacoes_licitacao 'Compre Fácil SAAAA', '783412125612', 'Qualquer coisa 5.', 122.00
 	
-	-- Teste com erro em ''.
+	-- Teste com erro em '@nom_basico'.
 	up_cadastrar_cotacoes_licitacao 'Compre Fácil SA', '783412125612', 'Qualquer coisa 5aa.', 122.00
 	
 	-- Teste sem erro.

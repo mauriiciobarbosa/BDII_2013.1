@@ -8,6 +8,8 @@ AS
 BEGIN
 	DECLARE @num_item CHAR(11);
 	
+	BEGIN TRANSACTION
+	
 	BEGIN TRY
 	
 		SELECT @num_item = num_item 
@@ -22,6 +24,8 @@ BEGIN
 		INSERT INTO dbo.produtos_licitacao
 		VALUES (@num_licitacao, @num_item, @qtd_item)
 		
+		COMMIT
+		
 	END TRY
 	BEGIN CATCH
 		SELECT 'INSERT' AS ErrorType, 
@@ -29,5 +33,7 @@ BEGIN
 			   ERROR_MESSAGE() AS ErrorMessage,
 			   ERROR_SEVERITY() AS ErrorSeverity, 
 			   ERROR_STATE() AS ErrorState;
+			   
+		ROLLBACK TRANSACTION
 	END CATCH
 END

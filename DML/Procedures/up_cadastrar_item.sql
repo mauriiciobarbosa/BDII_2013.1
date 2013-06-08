@@ -11,23 +11,26 @@ BEGIN
 	DECLARE @cod_grupo CHAR(2);
 	DECLARE @num_familia CHAR(2);
 	
+	BEGIN TRANSACTION
+	
 	BEGIN TRY
 	
 		SELECT @num_item = (MAX(CONVERT(BIGINT, num_item)) + 1) 
 		FROM dbo.produto
 		
-		SELECT @cod_grupo = cod_grupo, @num_familia = num_familia 
-		FROM dbo.familia
-		WHERE desc_grupo = @desc_grupo AND desc_familia = @desc_familia
+		SELECT @cod_grupo = f.cod_grupo, @num_familia = num_familia 
+		FROM dbo.familia f INNER JOIN dbo.grupo g ON f.cod_grupo = g.cod_grupo
+		WHERE desc_familia = @desc_familia AND desc_grupo = @desc_grupo
 		
 		IF @cod_grupo IS NULL
 		BEGIN
-			RAISERROR('Não foi possível encontrar a familia e o grupo ao qual o produto está associado,
-					    com a descrição informada.', 11, 1)
+			RAISERROR('Não foi possível encontrar a familia e o grupo ao qual o produto está associada.', 11, 1)
 		END
 		
 		INSERT INTO dbo.produto
 		VALUES (@num_item, @nom_basico, @nom_detalhe, @cod_grupo, @num_familia)
+		
+		COMMIT
 		
 	END TRY
 	BEGIN CATCH
@@ -36,5 +39,7 @@ BEGIN
 			   ERROR_MESSAGE() AS ErrorMessage,
 			   ERROR_SEVERITY() AS ErrorSeverity, 
 			   ERROR_STATE() AS ErrorState;
+			   
+		ROLLBACK TRANSACTION
 	END CATCH
 END

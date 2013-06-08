@@ -1,4 +1,6 @@
-CREATE PROCEDURE up_cadastro_unidade
+USE bd_licitacao
+
+ALTER PROCEDURE up_cadastro_unidade
 		(
 			@nom_secretaria VARCHAR(60),
 			@num_unidade CHAR(3),
@@ -7,6 +9,8 @@ CREATE PROCEDURE up_cadastro_unidade
 AS
 BEGIN	
 	DECLARE @cod_secretaria CHAR(2);
+	
+	BEGIN TRANSACTION
 	
 	BEGIN TRY
 	
@@ -22,6 +26,8 @@ BEGIN
 		INSERT INTO dbo.unidade
 		VALUES (@cod_secretaria, @num_unidade, @nome_unidade)
 		
+		COMMIT
+		
 	END TRY
 	BEGIN CATCH
 		SELECT 'INSERT' AS ErrorType, 
@@ -29,5 +35,7 @@ BEGIN
 			   ERROR_MESSAGE() AS ErrorMessage,
 			   ERROR_SEVERITY() AS ErrorSeverity, 
 			   ERROR_STATE() AS ErrorState;
+			   
+		ROLLBACK TRANSACTION
 	END CATCH
 END	

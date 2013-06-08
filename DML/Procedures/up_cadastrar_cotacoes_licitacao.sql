@@ -10,6 +10,8 @@ BEGIN
 	DECLARE @num_item CHAR(11);
 	DECLARE @num_fornecedor CHAR(14);
 
+	BEGIN TRANSACTION
+	
 	BEGIN TRY
 		-- Verifica se o produto existe.
 		SELECT @num_item = num_item
@@ -33,6 +35,8 @@ BEGIN
 		INSERT INTO dbo.cotacoes_licitacao
 		VALUES (@num_licitacao, @num_fornecedor, @num_item, @valor_cotacao)
 		
+		COMMIT
+		
 	END TRY
 	BEGIN CATCH
 		SELECT 'INSERT' AS ErrorType,
@@ -40,5 +44,7 @@ BEGIN
 			   ERROR_MESSAGE() AS ErrorMessage,
 			   ERROR_SEVERITY() AS ErrorSeverity, 
 			   ERROR_STATE() AS ErrorState;
+			   
+		ROLLBACK TRANSACTION
 	END CATCH
 END
